@@ -2,7 +2,10 @@
 Class User_model extends CI_Model
 {
     function login($username, $password)
-    {
+    {   
+        if (empty($username)) // Not adding empty check for password since it can be empty.
+           return false;
+      
         $this->db->select('uid,full_name,username, password,is_admin,avatar');
         $this->db->from('tbl_users');
         $this->db->where('username', $username);
@@ -18,6 +21,9 @@ Class User_model extends CI_Model
     
     function addUser($data)
     {
+        if (empty($data))
+            return false;
+        
         $this->db->insert('tbl_users', $data);
         return $this->db->insert_id();
     }
@@ -25,6 +31,10 @@ Class User_model extends CI_Model
     function save_location($data)
     {
         $uid = $this->session->userdata('logged_in')['uid'];
+        
+        if (empty($uid)) 
+            return false;
+        
         $this->db->where('uid', $uid);
         $this->db->update('tbl_users', $data);
         return $this->db->affected_rows();
@@ -32,12 +42,18 @@ Class User_model extends CI_Model
 
     function createGroup($data)
     {
+        if (empty($data))
+            return false;
+        
         $this->db->insert('tbl_groups', $data);
         return $this->db->insert_id();
     }
 
     function getUserDataById($userId)
     {
+        if (empty($userId))
+            return false;
+        
         $this->db->where('uid', $userId);
         $query = $this->db->get('tbl_users');
         return $query->result_array();
