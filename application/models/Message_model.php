@@ -7,14 +7,24 @@ class Message_model extends CI_Model
     }
     
     function insertMessage($messageData)
-    {
+    {   
+        if (empty($messageData)) 
+        {
+            return false;
+        }
+        
         $this->db->insert('messages', $messageData); 
         return $this->db->insert_id();
     }
 
     function insertimMessage($messageData)
-    {
-        $this->db->insert('tbl_messages', $messageData); 
+    {   
+        if (empty($messageData)) 
+        {
+            return false;
+        }
+        
+        $this->db->insert('tbl_messages', $messageData);
         return $this->db->insert_id();
     }
     
@@ -28,6 +38,11 @@ class Message_model extends CI_Model
 
     function getGroupMessages($limit, $start,$gid)
     {
+         if (empty($gid)) 
+         {
+            return false;
+         }
+         
          $this->db->limit($limit, $start);
          $this->db->order_by('msg_id', "desc"); 
          $uid = $this->session->userdata('logged_in')['uid'];
